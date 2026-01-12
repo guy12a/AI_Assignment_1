@@ -88,7 +88,17 @@ from cspbase import *
 
 def binary_ne_grid(cagey_grid):
     ##IMPLEMENT
-    pass
+    size = cagey_grid[0]
+    cells = createCellVariables(size)
+    csp = CSP("binaryCSP",cells)
+    #create row constraints
+    for start in range(0,(size^2)-size+1,size):
+        for curr in range(0,size-1):
+            for forward in range(start+curr+1,start+size):
+                constraint = Constraint("Cons("+(start+curr)+","+forward+")",)
+
+    return csp
+    #pass
 
 
 def nary_ad_grid(cagey_grid):
@@ -98,3 +108,14 @@ def nary_ad_grid(cagey_grid):
 def cagey_csp_model(cagey_grid):
     ##IMPLEMENT
     pass
+
+#creates a list of variables for each cell, with domain based on board
+def createCellVariables(size):
+    list = []
+    dom = []
+    for x in range(1,size+1):
+        dom.append(x)
+    for i in range(1,size+1):
+        for j in range(1,size+1):
+            list.append(Variable("Cell("+i+","+j+")",dom))
+    return list

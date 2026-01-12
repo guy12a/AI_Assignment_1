@@ -40,19 +40,19 @@ def ord_dh(csp):
     ''' return next Variable to be assigned according to the Degree Heuristic '''
     # IMPLEMENT
     vars = csp.get_all_unasgn_cars()
-    next = vars(0)
+    next = vars[0]
     numInvolved = 0
     for v in vars:
         if numInvolved < csp.get_cons_with_var(v):
             next = v
-    return v
+    return next
     #pass
 
 def ord_mrv(csp):
     ''' return Variable to be assigned according to the Minimum Remaining Values heuristic '''
     # IMPLEMENT
     vars = csp.get_all_unasgn_cars()
-    next = vars(0)
+    next = vars[0]
     for v in vars:
         if v.cur_domain_size() < next.cur_domain_size():
             next = v
