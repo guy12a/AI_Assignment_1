@@ -101,8 +101,36 @@ def prop_FC(csp, newVar=None):
        only one uninstantiated Variable. Remember to keep
        track of all pruned Variable,value pairs and return '''
     #IMPLEMENT
-    pass
+    if newVar != None:
+        pruned = []
+        returnFlag = True
+        for c in csp.get_cons_with_var(newVar):
+            if c.get_n_unasgn() == 1:
+                #create all tuple options with the remaining var
+                start = []
+                options = []
+                end = []
+                unasgnedVar = None
+                flagBefore = True
+                vars = c.get_scope()
+                for var in vars:
+                    if var.is_assigned() and flagBefore:
+                        start.append(var.get_assigned_value())
+                    elif not var.is_assigned():
+                        flagBefore = False
+                        unasgnedVar = var
+                        options = var.cur_domain()
+                    elif var.is_assigned() and (not flagBefore):
+                        end.append(var.get_assigned_value())
+                    
+                #for each option try to see if it can satisfy, prunes and adds to list if not
+                for option in options:
+                    if not c.check_tuple(start + [option] + end) :
+                        pruned.append([unasgnedVar,option])
+                        unasgnedVar.prune_value(option)
 
+                if len(options) == len(pruned):
+                    returnFlag = False
 
 def prop_GAC(csp, newVar=None):
     '''Do GAC propagation. If newVar is None we do initial GAC enforce
