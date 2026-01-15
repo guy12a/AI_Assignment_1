@@ -80,6 +80,9 @@
          for gac we initialize the GAC queue with all constraints containing V.
    '''
 
+from collections import deque
+
+
 def prop_BT(csp, newVar=None):
     '''Do plain backtracking propagation. That is, do no
     propagation at all. Just check fully instantiated constraints'''
@@ -100,20 +103,18 @@ def prop_FC(csp, newVar=None):
     '''Do forward checking. That is check constraints with
        only one uninstantiated Variable. Remember to keep
        track of all pruned Variable,value pairs and return '''
-    #IMPLEMENT
-    if newVar != None:
-        pruned = []
-        returnFlag = True
+    pruned = []
+    returnFlag = True
+    if newVar is not None:
         for c in csp.get_cons_with_var(newVar):
             if c.get_n_unasgn() == 1:
                 #create all tuple options with the remaining var
                 start = []
                 options = []
                 end = []
-                unasgnedVar = None
+                unasgnedVar = None #current unassigned variable that we are checking
                 flagBefore = True
-                vars = c.get_scope()
-                for var in vars:
+                for var in c.get_scope():
                     if var.is_assigned() and flagBefore:
                         start.append(var.get_assigned_value())
                     elif not var.is_assigned():
@@ -126,15 +127,42 @@ def prop_FC(csp, newVar=None):
                 #for each option try to see if it can satisfy, prunes and adds to list if not
                 for option in options:
                     if not c.check_tuple(start + [option] + end) :
-                        pruned.append([unasgnedVar,option])
+                        pruned.append((unasgnedVar,option))
                         unasgnedVar.prune_value(option)
 
-                if len(options) == len(pruned):
+                if unasgnedVar.cur_domain_size() == 0:
                     returnFlag = False
+
+    else:
+        for c in csp.get_all_cons():
+            vars = c.get_scope()
+            #for all constraints with one variable,
+            #prune their current domain to the right values
+            if len(vars) == 1:
+                var = vars[0]
+                for option in var.cur_domain():
+                    if not c.check_tuple([option]):
+                        pruned.append((var,option))
+                        var.prune_value(option)
+                if var.cur_domain_size() == 0:
+                    returnFlag = False
+
+    return returnFlag, pruned
+
+
 
 def prop_GAC(csp, newVar=None):
     '''Do GAC propagation. If newVar is None we do initial GAC enforce
        processing all constraints. Otherwise we do GAC enforce with
        constraints containing newVar on GAC Queue'''
     #IMPLEMENT
-    pass
+    pruned = []
+    returnFlag = True
+    if newVar is not None:
+        queue = deque(csp.get_cons_with_var(newVar))
+        while queue:
+            
+
+
+
+

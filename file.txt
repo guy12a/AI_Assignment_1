@@ -12,5 +12,7 @@ Questions:
 2. in ord_dh - do we look for one involved in as many cons excluding itself?
 3. Negative target numbers?
 
+4. In FC propagator check for need of check before pruning (in_cur_domain)
+5. Arrays vs tuples - when appending to pruned
 
 
