@@ -7,42 +7,10 @@ n-n+1, n-n+2, n-n+3
 n+1-n+2, n+1-n+3
 n+2-n+3
 
-
-size 4
-row: 0, 4, 8, 12
-col: 0, 1, 2, 3
-
-row 0
-col 0
-curr 1
-
-row 0
-col 0
-curr 2
-
-row 0
-col 0
-curr 3
-
-row 0
-col 1
-curr 2
-
-row 0
-col 1
-curr 3
-
-row 0
-col 2
-curr 3
-
-row 4
-col 0
-curr 5
-
-row 4
-col 0
-curr 6
+Questions:
+1. Understanding Constraint satisfaction storage
+2. in ord_dh - do we look for one involved in as many cons excluding itself?
+3. Negative target numbers?
 
 
 

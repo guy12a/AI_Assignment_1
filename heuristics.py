@@ -38,25 +38,27 @@ var_ordering == a function with the following template
 
 def ord_dh(csp):
     ''' return next Variable to be assigned according to the Degree Heuristic '''
-    # IMPLEMENT
     vars = csp.get_all_unasgn_cars()
-    next = vars[0]
-    numInvolved = 0
+    nextToAssign = vars[0]
+    numInvolved = -1
     for v in vars:
-        if numInvolved < csp.get_cons_with_var(v):
-            next = v
-    return next
-    #pass
+        currInvolved = 0
+        constraints = csp.get_cons_with_var(v)
+        for con in constraints:
+            if con.get_n_unasgn() >0: #they all include v itself - do we look for one involved in as many cons excluding itself?
+                currInvolved += 1
+        if numInvolved < currInvolved:
+            nextToAssign = v
+            numInvolved = currInvolved
+    return nextToAssign
 
 def ord_mrv(csp):
     ''' return Variable to be assigned according to the Minimum Remaining Values heuristic '''
-    # IMPLEMENT
     vars = csp.get_all_unasgn_cars()
-    next = vars[0]
+    nextToAssign = vars[0]
     for v in vars:
-        if v.cur_domain_size() < next.cur_domain_size():
-            next = v
-        if next.cur_domain_size() == 1:
-            break
-    return next
-    #pass
+        if v.cur_domain_size() < nextToAssign.cur_domain_size():
+            nextToAssign = v
+            if nextToAssign.cur_domain_size() == 1: #stopping if minimum already
+                break
+    return nextToAssign
