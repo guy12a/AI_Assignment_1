@@ -15,4 +15,7 @@ Questions:
 4. In FC propagator check for need of check before pruning (in_cur_domain)
 5. Arrays vs tuples - when appending to pruned
 
+6. Can i prune from list while iterating over list?
+7. Stop immediatly if encountering domainsize=0
+
 

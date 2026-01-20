@@ -85,20 +85,34 @@ An example of a 3x3 puzzle would be defined as:
 '''
 
 from cspbase import *
+import itertools
 
 def binary_ne_grid(cagey_grid):
-    ##IMPLEMENT
     size = cagey_grid[0]
-    cells = createCellVariables(size)
+    dom = list(range(1,size+1))
+    cells = createCellVariables(size,dom)
     csp = CSP("binaryCSP",cells)
-    #create row constraints
-    for start in range(0,(size^2)-size+1,size):
-        for curr in range(0,size-1):
-            for forward in range(start+curr+1,start+size):
-                constraint = Constraint("Cons("+(start+curr)+","+forward+")",)
+
+    #create constraints
+    constraints = []
+    counter =0
+    arrayRange = list(range(0,size))
+
+    for i in arrayRange:
+        
+    for row in grid:
+        perms =list(itertools.permutations(row, 2))
+        for pair in perms:
+            first = pair[0]
+            second = pair[1]
+            constraints.append(Constraint("Row"+counter,[first,second]))
+            counter +=1
+
+
+
+    combinations = list(itertools.permutations(arrayRange, 2)) #provides something like [(1, 2), (1, 3), (2, 1), (2, 3), (3, 1), (3, 2)]
 
     return csp
-    #pass
 
 
 def nary_ad_grid(cagey_grid):
@@ -110,12 +124,10 @@ def cagey_csp_model(cagey_grid):
     pass
 
 #creates a list of variables for each cell, with domain based on board
-def createCellVariables(size):
+def createCellVariables(size,dom):
     list = []
-    dom = []
-    for x in range(1,size+1):
-        dom.append(x)
     for i in range(1,size+1):
         for j in range(1,size+1):
             list.append(Variable("Cell("+i+","+j+")",dom))
+
     return list

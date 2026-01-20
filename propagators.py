@@ -106,46 +106,22 @@ def prop_FC(csp, newVar=None):
     pruned = []
     returnFlag = True
     if newVar is not None:
-        for c in csp.get_cons_with_var(newVar):
-            if c.get_n_unasgn() == 1:
-                #create all tuple options with the remaining var
-                start = []
-                options = []
-                end = []
-                unasgnedVar = None #current unassigned variable that we are checking
-                flagBefore = True
-                for var in c.get_scope():
-                    if var.is_assigned() and flagBefore:
-                        start.append(var.get_assigned_value())
-                    elif not var.is_assigned():
-                        flagBefore = False
-                        unasgnedVar = var
-                        options = var.cur_domain()
-                    elif var.is_assigned() and (not flagBefore):
-                        end.append(var.get_assigned_value())
-                    
-                #for each option try to see if it can satisfy, prunes and adds to list if not
-                for option in options:
-                    if not c.check_tuple(start + [option] + end) :
-                        pruned.append((unasgnedVar,option))
-                        unasgnedVar.prune_value(option)
-
-                if unasgnedVar.cur_domain_size() == 0:
-                    returnFlag = False
-
+        cons = csp.get_cons_with_var(newVar)
     else:
-        for c in csp.get_all_cons():
-            vars = c.get_scope()
-            #for all constraints with one variable,
-            #prune their current domain to the right values
-            if len(vars) == 1:
-                var = vars[0]
-                for option in var.cur_domain():
-                    if not c.check_tuple([option]):
-                        pruned.append((var,option))
-                        var.prune_value(option)
-                if var.cur_domain_size() == 0:
-                    returnFlag = False
+        cons = csp.get_all_cons()
+    for c in cons:
+        if c.get_n_unasgn() == 1:
+            unasgnedVar = c.get_unasgn_vars()[0]
+            options = unasgnedVar.cur_domain()
+    
+            #for each option try to see if it can satisfy, prunes and adds to list if not
+            for option in options:
+                if not c.check_var_val(unasgnedVar,option):
+                    pruned.append((unasgnedVar,option))
+                    unasgnedVar.prune_value(option)
+
+            if unasgnedVar.cur_domain_size() == 0:
+                returnFlag = False
 
     return returnFlag, pruned
 
@@ -159,10 +135,38 @@ def prop_GAC(csp, newVar=None):
     pruned = []
     returnFlag = True
     if newVar is not None:
+        #puts all constraints involved with the assigned var in a queue
         queue = deque(csp.get_cons_with_var(newVar))
-        while queue:
+    else:
+        queue = deque(csp.get_all_cons())
+    
+    #as long as the queue isnt empty, keep checking things against each other
+    while queue:
+        con = queue.popleft()
+        #for a specific constraint, prune unassigned vars and check they still have domains
+        for var in con.get_anasgn_vars():
+            removed = remove_inconsistent_values(var,con)
+            if len(removed) > 0:
+                pruned.extend(removed)
+                for c in csp.get_cons_with_var(var):
+                    queue.append(c)                                
+            if var.cur_domain_size() == 0:
+                returnFlag=False
             
-
+    return returnFlag, pruned
+        
+#variable and a constraint its involved in
+#removes from var all values that have problems 
+def remove_inconsistent_values(tail, constraint):
+    pruned = []
+    toReturn = []
+    for val in tail.cur_domain():
+        if not constraint.check_var_val(tail,val):
+            pruned.append(val)
+    for val in pruned:
+        tail.prune_value(val)
+        toReturn.append((tail,val))
+    return toReturn
 
 
 
