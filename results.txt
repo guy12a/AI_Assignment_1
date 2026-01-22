@@ -61,52 +61,52 @@ Input board: (2, [(1, [(1, 1), (1, 2), (2, 1), (2, 2)], '%')])
 
 
 Encoded incorrect constraint:
- {('%', 1, 2, 1, 1): True, ('%', 2, 1, 1, 1): True, ('%', 1, 1, 1, 2): True, ('%', 1, 1, 2, 1): True, ('%', 1, 2, 1, 2): True, ('%', 1, 2, 2, 1): True, ('%', 2, 2, 1, 1): True, ('%', 2, 1, 1, 2): True, ('%', 2, 1, 2, 1): True, ('%', 1, 1, 2, 2): True, ('%', 2, 2, 2, 1): True, ('%', 2, 1, 2, 2): True, ('%', 1, 2, 2, 2): True, ('%', 2, 2, 1, 2): True}
+ {('%', 2, 2, 2, 1): True, ('%', 2, 1, 2, 2): True, ('%', 1, 2, 2, 2): True, ('%', 2, 2, 1, 2): True}
 
 ----------------------------------------------------------------------
-Ran 46 tests in 2.153s
+Ran 46 tests in 2.136s
 
 FAILED (failures=2)
 ----------------------------------------------------------------------
 Time spent:
 
 test_bne_grid_1: 0.0003s
-test_bne_grid_2: 0.0003s
-test_bne_grid_3: 0.0017s
-test_bne_grid_4: 0.0074s
-test_bne_grid_5: 0.0106s
+test_bne_grid_2: 0.0002s
+test_bne_grid_3: 0.0013s
+test_bne_grid_4: 0.0087s
+test_bne_grid_5: 0.0100s
 test_cages_1: 0.0001s
 test_cages_2: 0.0001s
-test_cages_3: 0.0001s
-test_cages_4: 0.0009s
-test_cages_5: 0.0022s
-test_cages_6: 0.0003s
-test_cages_7: 0.0004s
-test_nary_grid_1: 0.0001s
+test_cages_3: 0.0002s
+test_cages_4: 0.0010s
+test_cages_5: 0.0004s
+test_cages_6: 0.0002s
+test_cages_7: 0.0002s
+test_nary_grid_1: 0.0003s
 test_nary_grid_2: 0.0006s
-test_nary_grid_3: 0.0031s
-test_nary_grid_4: 0.0310s
-test_bin_prop_fc_0: 0.0008s
-test_bin_prop_fc_1: 0.0017s
-test_bin_prop_fc_2: 0.0019s
-test_bin_prop_fc_3: 0.0015s
-test_bin_prop_fc_4: 0.0019s
-test_prop_fc_0: 0.0014s
-test_prop_fc_1: 0.3257s
-test_prop_fc_2: 0.6550s
-test_prop_fc_3: 0.0015s
-test_prop_fc_4: 0.5822s
-test_prop_GAC_0: 0.0012s
-test_prop_GAC_1: 0.0037s
-test_prop_GAC_10: 0.1811s
-test_prop_GAC_2: 0.0042s
-test_prop_GAC_3: 0.0032s
+test_nary_grid_3: 0.0030s
+test_nary_grid_4: 0.0289s
+test_bin_prop_fc_0: 0.0005s
+test_bin_prop_fc_1: 0.0020s
+test_bin_prop_fc_2: 0.0025s
+test_bin_prop_fc_3: 0.0021s
+test_bin_prop_fc_4: 0.0018s
+test_prop_fc_0: 0.0009s
+test_prop_fc_1: 0.3080s
+test_prop_fc_2: 0.6311s
+test_prop_fc_3: 0.0009s
+test_prop_fc_4: 0.5918s
+test_prop_GAC_0: 0.0011s
+test_prop_GAC_1: 0.0028s
+test_prop_GAC_10: 0.1851s
+test_prop_GAC_2: 0.0040s
+test_prop_GAC_3: 0.0031s
 test_prop_GAC_4: 0.0046s
-test_prop_GAC_5: 0.0126s
-test_prop_GAC_6: 0.0461s
-test_prop_GAC_7: 0.0109s
-test_prop_GAC_8: 0.0927s
-test_prop_GAC_9: 0.1397s
+test_prop_GAC_5: 0.0128s
+test_prop_GAC_6: 0.0494s
+test_prop_GAC_7: 0.0113s
+test_prop_GAC_8: 0.0998s
+test_prop_GAC_9: 0.1464s
 ----------------------------------------------------------------------
 Grades:
 
@@ -121,6 +121,6 @@ CAGEY: 0.3333333333333333/0.5
 TOTAL: 2.583333333333333/2.75
 Code quality: ?/0.25
 
-Running time: 2026_01_21-23:46:18
+Running time: 2026_01_22-15:17:26
 
 ===========================================

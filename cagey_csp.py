@@ -181,20 +181,21 @@ def cagey_csp_model(cagey_grid):
         csp.add_var(varOp)
 
         #add cage constraints
-
         #create domain based on size of cage, operation and target
         cageDom = getCageDomain(range(1,size+1),len(cage_cells),cage_op,cage_target)
 
-        #create constraint: get relevant cells and the cageop, and place with domains in csp
+        #create constraint: get relevant cells and the cage_op, and place with domains in csp
         scope = []
         for cell in cage_cells:
             scope.append(getCell(cell[0],cell[1],cells,size))
         scope.append(varOp)
+
         constraint = Constraint(f"Cell{counter}",scope)
         constraint.add_satisfying_tuples(cageDom)
         csp.add_constraint(constraint)
+        
         counter+=1
-    return csp,cells
+    return csp,csp.get_all_vars()
 
 
 #Helper functions
@@ -229,37 +230,60 @@ def getCell(row, column, cells, n):
 #create a domain for a cage based on size of cage, operation and target
 def getCageDomain(dom, cageSize, op, target):
     domain = []
+
     if op == '+' or op=='*':
+        #create combinations without repetitions cause order doesnt matter: 
+        #for cage 3x3: (1,1,2) but not 1,2,1 and 2,1,1
         options = itertools.combinations_with_replacement(dom,cageSize)
-    else:
+        domain = checkOptions(options,op,target)
+
+    elif op == '-' or op=='/' or op=='%':
+        #create product with repetitions cause order matters: 
+        #for cage 3x3: (1,1,2) but also 1,2,1 and 2,1,1
         options = itertools.product(dom, repeat=cageSize)
-    
-    if op == '?':
-        for option in options:
-            for oper in ['+','*','-','/','%']:
-                if checkOp(oper,target,option):
-                    for perm in set(itertools.permutations(option)):
-                        domain.append((*perm, oper))
+        domain = checkOptions(options,op,target)
+
+    #for ? we run all options for each oeprator
     else:
-        for option in options:
-            if checkOp(op,target,option):
-                for perm in set(itertools.permutations(option)):
-                    domain.append((*perm, op))
+        options = itertools.combinations_with_replacement(dom,cageSize)
+        options2 = itertools.product(dom, repeat=cageSize)
+        for oper in ['-','/','%','+','*']:
+            if op == '+' or op=='*':
+                domain.extend(checkOptions(options,op,target))
+            else:
+                domain.extend(checkOptions(options2,op,target))
+
     return domain
 
-#set for permutations
-#optimize for + and * in the ? case
-#finish - / %
+#just iterates over options and checks each, returns full domain for the operation
+def checkOptions(options,op,target):
+    domain = []
+    for option in options:
+        if checkOp(op,target,option):
+            for perm in set(itertools.permutations(option)):
+                domain.append((*perm, op))
+    return domain
 
+
+#given operation and values, 
+#check if they provide the target value (keeping their order)
 def checkOp(op, target, values):
-    if op == '+' and sum(values) == target:
-        return True
-    elif op == '*' and prod(values) == target:
-        return True
+    result = values[0]
+    if op == '+':
+        for x in values[1:]:
+            result = result + x
+    elif op == '*':
+        for x in values[1:]:
+            result = result * x
     elif op == '-':
-        return any(a - b == target for a, b in itertools.permutations(values, 2))
+        for x in values[1:]:
+            result = result - x
     elif op == '/':
-        return any(b != 0 and a / b == target for a, b in itertools.permutations(values, 2))
+        for x in values[1:]:
+            result = result / x
     elif op == '%':
-        return any(b != 0 and a % b == target for a, b in itertools.permutations(values, 2))
+        for x in values[1:]:
+            result = result % x
+    if result == target:
+        return True
     return False
