@@ -144,7 +144,7 @@ def prop_GAC(csp, newVar=None):
     while queue:
         con = queue.popleft()
         #for a specific constraint, prune unassigned vars and check they still have domains
-        for var in con.get_anasgn_vars():
+        for var in con.get_unasgn_vars():
             removed = remove_inconsistent_values(var,con)
             if len(removed) > 0:
                 pruned.extend(removed)

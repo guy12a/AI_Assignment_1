@@ -1,0 +1,126 @@
+test_bne_grid_1 (__main__.TestBinaryGrid.test_bne_grid_1) ... ok
+test_bne_grid_2 (__main__.TestBinaryGrid.test_bne_grid_2) ... ok
+test_bne_grid_3 (__main__.TestBinaryGrid.test_bne_grid_3) ... ok
+test_bne_grid_4 (__main__.TestBinaryGrid.test_bne_grid_4) ... ok
+test_bne_grid_5 (__main__.TestBinaryGrid.test_bne_grid_5) ... ok
+test_cage_existence (__main__.TestCageConstraints.test_cage_existence) ... FAIL
+test_cages_1 (__main__.TestCageConstraints.test_cages_1) ... ok
+test_cages_2 (__main__.TestCageConstraints.test_cages_2) ... ok
+test_cages_3 (__main__.TestCageConstraints.test_cages_3) ... ok
+test_cages_4 (__main__.TestCageConstraints.test_cages_4) ... ok
+test_cages_5 (__main__.TestCageConstraints.test_cages_5) ... ok
+test_cages_6 (__main__.TestCageConstraints.test_cages_6) ... ok
+test_cages_7 (__main__.TestCageConstraints.test_cages_7) ... FAIL
+test_dh_1 (__main__.TestDH.test_dh_1) ... ok
+test_dh_2 (__main__.TestDH.test_dh_2) ... ok
+test_dh_3 (__main__.TestDH.test_dh_3) ... ok
+test_dh_4 (__main__.TestDH.test_dh_4) ... ok
+test_mrv_1 (__main__.TestMRV.test_mrv_1) ... ok
+test_mrv_2 (__main__.TestMRV.test_mrv_2) ... ok
+test_mrv_3 (__main__.TestMRV.test_mrv_3) ... ok
+test_mrv_4 (__main__.TestMRV.test_mrv_4) ... ok
+test_nary_grid_1 (__main__.TestNaryGrid.test_nary_grid_1) ... ok
+test_nary_grid_2 (__main__.TestNaryGrid.test_nary_grid_2) ... ok
+test_nary_grid_3 (__main__.TestNaryGrid.test_nary_grid_3) ... ok
+test_nary_grid_4 (__main__.TestNaryGrid.test_nary_grid_4) ... ok
+test_bin_prop_fc_0 (__main__.TestPropFC.test_bin_prop_fc_0) ... ok
+test_bin_prop_fc_1 (__main__.TestPropFC.test_bin_prop_fc_1) ... ok
+test_bin_prop_fc_2 (__main__.TestPropFC.test_bin_prop_fc_2) ... ok
+test_bin_prop_fc_3 (__main__.TestPropFC.test_bin_prop_fc_3) ... ok
+test_bin_prop_fc_4 (__main__.TestPropFC.test_bin_prop_fc_4) ... ok
+test_prop_fc_0 (__main__.TestPropFC.test_prop_fc_0) ... ok
+test_prop_fc_1 (__main__.TestPropFC.test_prop_fc_1) ... ok
+test_prop_fc_2 (__main__.TestPropFC.test_prop_fc_2) ... ok
+test_prop_fc_3 (__main__.TestPropFC.test_prop_fc_3) ... ok
+test_prop_fc_4 (__main__.TestPropFC.test_prop_fc_4) ... ok
+test_prop_GAC_0 (__main__.TestPropGAC.test_prop_GAC_0) ... ok
+test_prop_GAC_1 (__main__.TestPropGAC.test_prop_GAC_1) ... ok
+test_prop_GAC_10 (__main__.TestPropGAC.test_prop_GAC_10) ... ok
+test_prop_GAC_2 (__main__.TestPropGAC.test_prop_GAC_2) ... ok
+test_prop_GAC_3 (__main__.TestPropGAC.test_prop_GAC_3) ... ok
+test_prop_GAC_4 (__main__.TestPropGAC.test_prop_GAC_4) ... ok
+test_prop_GAC_5 (__main__.TestPropGAC.test_prop_GAC_5) ... ok
+test_prop_GAC_6 (__main__.TestPropGAC.test_prop_GAC_6) ... ok
+test_prop_GAC_7 (__main__.TestPropGAC.test_prop_GAC_7) ... ok
+test_prop_GAC_8 (__main__.TestPropGAC.test_prop_GAC_8) ... ok
+test_prop_GAC_9 (__main__.TestPropGAC.test_prop_GAC_9) ... ok
+
+======================================================================
+FAIL: test_cage_existence (__main__.TestCageConstraints.test_cage_existence)
+----------------------------------------------------------------------
+AssertionError: False is not true : failed to find cage variable
+
+======================================================================
+FAIL: test_cages_7 (__main__.TestCageConstraints.test_cages_7)
+----------------------------------------------------------------------
+AssertionError: False is not true : 
+
+Failed to encode:
+ {('%', 1, 1, 1, 2): True, ('%', 1, 1, 2, 1): True, ('%', 1, 2, 1, 1): True, ('%', 1, 2, 2, 2): True, ('%', 2, 1, 1, 1): True, ('%', 2, 1, 2, 2): True, ('%', 2, 2, 1, 2): True, ('%', 2, 2, 2, 1): True}
+Input board: (2, [(1, [(1, 1), (1, 2), (2, 1), (2, 2)], '%')])
+
+
+Encoded incorrect constraint:
+ {('%', 1, 2, 1, 1): True, ('%', 2, 1, 1, 1): True, ('%', 1, 1, 1, 2): True, ('%', 1, 1, 2, 1): True, ('%', 1, 2, 1, 2): True, ('%', 1, 2, 2, 1): True, ('%', 2, 2, 1, 1): True, ('%', 2, 1, 1, 2): True, ('%', 2, 1, 2, 1): True, ('%', 1, 1, 2, 2): True, ('%', 2, 2, 2, 1): True, ('%', 2, 1, 2, 2): True, ('%', 1, 2, 2, 2): True, ('%', 2, 2, 1, 2): True}
+
+----------------------------------------------------------------------
+Ran 46 tests in 2.153s
+
+FAILED (failures=2)
+----------------------------------------------------------------------
+Time spent:
+
+test_bne_grid_1: 0.0003s
+test_bne_grid_2: 0.0003s
+test_bne_grid_3: 0.0017s
+test_bne_grid_4: 0.0074s
+test_bne_grid_5: 0.0106s
+test_cages_1: 0.0001s
+test_cages_2: 0.0001s
+test_cages_3: 0.0001s
+test_cages_4: 0.0009s
+test_cages_5: 0.0022s
+test_cages_6: 0.0003s
+test_cages_7: 0.0004s
+test_nary_grid_1: 0.0001s
+test_nary_grid_2: 0.0006s
+test_nary_grid_3: 0.0031s
+test_nary_grid_4: 0.0310s
+test_bin_prop_fc_0: 0.0008s
+test_bin_prop_fc_1: 0.0017s
+test_bin_prop_fc_2: 0.0019s
+test_bin_prop_fc_3: 0.0015s
+test_bin_prop_fc_4: 0.0019s
+test_prop_fc_0: 0.0014s
+test_prop_fc_1: 0.3257s
+test_prop_fc_2: 0.6550s
+test_prop_fc_3: 0.0015s
+test_prop_fc_4: 0.5822s
+test_prop_GAC_0: 0.0012s
+test_prop_GAC_1: 0.0037s
+test_prop_GAC_10: 0.1811s
+test_prop_GAC_2: 0.0042s
+test_prop_GAC_3: 0.0032s
+test_prop_GAC_4: 0.0046s
+test_prop_GAC_5: 0.0126s
+test_prop_GAC_6: 0.0461s
+test_prop_GAC_7: 0.0109s
+test_prop_GAC_8: 0.0927s
+test_prop_GAC_9: 0.1397s
+----------------------------------------------------------------------
+Grades:
+
+FC: 0.5/0.5
+GAC: 0.75/0.75
+MRV: 0.25/0.25
+DH: 0.25/0.25
+BINARY: 0.25/0.25
+NARY: 0.25/0.25
+CAGEY: 0.3333333333333333/0.5
+
+TOTAL: 2.583333333333333/2.75
+Code quality: ?/0.25
+
+Running time: 2026_01_21-23:46:18
+
+===========================================

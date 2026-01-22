@@ -38,7 +38,7 @@ var_ordering == a function with the following template
 
 def ord_dh(csp):
     ''' return next Variable to be assigned according to the Degree Heuristic '''
-    vars = csp.get_all_unasgn_cars()
+    vars = csp.get_all_unasgn_vars()
     nextToAssign = vars[0]
     numInvolved = -1
     for v in vars:
@@ -54,7 +54,7 @@ def ord_dh(csp):
 
 def ord_mrv(csp):
     ''' return Variable to be assigned according to the Minimum Remaining Values heuristic '''
-    vars = csp.get_all_unasgn_cars()
+    vars = csp.get_all_unasgn_vars()
     nextToAssign = vars[0]
     for v in vars:
         if v.cur_domain_size() < nextToAssign.cur_domain_size():

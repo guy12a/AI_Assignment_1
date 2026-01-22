@@ -161,31 +161,40 @@ def cagey_csp_model(cagey_grid):
     size = cagey_grid[0]
     cages = cagey_grid[1]
 
-    cage_domain = ['+','-','*','/','%']
+    op_domain = ['+','-','*','/','%']
     counter=0
     for cage in cages:
-        cage_value = cage[0]
+        cage_target = cage[0]
         cage_cells = cage[1]
         cage_op = cage[2]
 
         #cutting unnecessary calculations... if only one cell in cage, default to *
         #and if target is higher than what addition could provide, then it must be * too
-        if cage_op == '?' and ((cage_value > len(cage_cells)*size) or (len(cage_cells) ==1)):
+        if cage_op == '?' and ((cage_target > len(cage_cells)*size) or (len(cage_cells) ==1)):
             cage_op = '*'
         
         #sets up constraints for cage op
         if cage_op == '?':
-            csp.add_var(Variable(f"Cage{counter}",cage_domain))
+            varOp = Variable(f"Op{counter}",op_domain)
         else:
-            csp.add_var(Variable(f"Cage{counter}",[cage_op]))
-        
+            varOp = Variable(f"Op{counter}",[cage_op])
+        csp.add_var(varOp)
+
         #add cage constraints
 
         #create domain based on size of cage, operation and target
+        cageDom = getCageDomain(range(1,size+1),len(cage_cells),cage_op,cage_target)
 
         #create constraint: get relevant cells and the cageop, and place with domains in csp
-
+        scope = []
+        for cell in cage_cells:
+            scope.append(getCell(cell[0],cell[1],cells,size))
+        scope.append(varOp)
+        constraint = Constraint(f"Cell{counter}",scope)
+        constraint.add_satisfying_tuples(cageDom)
+        csp.add_constraint(constraint)
         counter+=1
+    return csp,cells
 
 
 #Helper functions
@@ -229,13 +238,14 @@ def getCageDomain(dom, cageSize, op, target):
         for option in options:
             for oper in ['+','*','-','/','%']:
                 if checkOp(oper,target,option):
-                    for perm in itertools.permutations(option):
+                    for perm in set(itertools.permutations(option)):
                         domain.append((*perm, oper))
     else:
         for option in options:
             if checkOp(op,target,option):
-                for perm in itertools.permutations(option):
+                for perm in set(itertools.permutations(option)):
                     domain.append((*perm, op))
+    return domain
 
 #set for permutations
 #optimize for + and * in the ? case
@@ -247,9 +257,9 @@ def checkOp(op, target, values):
     elif op == '*' and prod(values) == target:
         return True
     elif op == '-':
-        pass
+        return any(a - b == target for a, b in itertools.permutations(values, 2))
     elif op == '/':
-        pass
+        return any(b != 0 and a / b == target for a, b in itertools.permutations(values, 2))
     elif op == '%':
-        pass
+        return any(b != 0 and a % b == target for a, b in itertools.permutations(values, 2))
     return False
