@@ -84,6 +84,7 @@ An example of a 3x3 puzzle would be defined as:
 
 '''
 
+from math import prod
 from cspbase import *
 import itertools
 
@@ -166,6 +167,7 @@ def cagey_csp_model(cagey_grid):
         cage_value = cage[0]
         cage_cells = cage[1]
         cage_op = cage[2]
+
         #cutting unnecessary calculations... if only one cell in cage, default to *
         #and if target is higher than what addition could provide, then it must be * too
         if cage_op == '?' and ((cage_value > len(cage_cells)*size) or (len(cage_cells) ==1)):
@@ -176,8 +178,13 @@ def cagey_csp_model(cagey_grid):
             csp.add_var(Variable(f"Cage{counter}",cage_domain))
         else:
             csp.add_var(Variable(f"Cage{counter}",[cage_op]))
-
         
+        #add cage constraints
+
+        #create domain based on size of cage, operation and target
+
+        #create constraint: get relevant cells and the cageop, and place with domains in csp
+
         counter+=1
 
 
@@ -206,3 +213,43 @@ def collectCells(number, rowOrCol, cells, n):
 #get specific cell based on row and column  
 def getCell(row, column, cells, n):
     return cells[(row-1)*n + column-1]
+
+
+#====== Domain Creation for cages =======
+
+#create a domain for a cage based on size of cage, operation and target
+def getCageDomain(dom, cageSize, op, target):
+    domain = []
+    if op == '+' or op=='*':
+        options = itertools.combinations_with_replacement(dom,cageSize)
+    else:
+        options = itertools.product(dom, repeat=cageSize)
+    
+    if op == '?':
+        for option in options:
+            for oper in ['+','*','-','/','%']:
+                if checkOp(oper,target,option):
+                    for perm in itertools.permutations(option):
+                        domain.append((*perm, oper))
+    else:
+        for option in options:
+            if checkOp(op,target,option):
+                for perm in itertools.permutations(option):
+                    domain.append((*perm, op))
+
+#set for permutations
+#optimize for + and * in the ? case
+#finish - / %
+
+def checkOp(op, target, values):
+    if op == '+' and sum(values) == target:
+        return True
+    elif op == '*' and prod(values) == target:
+        return True
+    elif op == '-':
+        pass
+    elif op == '/':
+        pass
+    elif op == '%':
+        pass
+    return False
