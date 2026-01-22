@@ -1,7 +1,7 @@
 # =============================
 # Student Names: Guy Avraham
 # Group ID: 50
-# Date: 12/01/2026
+# Date: 22/01/2026
 # =============================
 # CISC 352
 # propagators.py

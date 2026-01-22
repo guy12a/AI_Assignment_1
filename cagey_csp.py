@@ -1,7 +1,7 @@
 # =============================
-# Student Names:
-# Group ID:
-# Date:
+# Student Names: Guy Avraham
+# Group ID: 50
+# Date: 22/01/2026
 # =============================
 # CISC 352
 # cagey_csp.py
@@ -170,30 +170,34 @@ def cagey_csp_model(cagey_grid):
 
         #cutting unnecessary calculations... if only one cell in cage, default to *
         #and if target is higher than what addition could provide, then it must be * too
-        if cage_op == '?' and ((cage_target > len(cage_cells)*size) or (len(cage_cells) ==1)):
-            cage_op = '*'
+        #issues with testing... expected to remain the same operator
+        # if cage_op == '?' and ((cage_target > len(cage_cells)*size) or (len(cage_cells) ==1)):
+        #     cage_op = '*'
         
+        #get relevant cells and the cage_op
+        scope = []
+        cell_names = []
+        for cell in cage_cells:
+            scope.append(getCell(cell[0],cell[1],cells,size))
+            cell_names.append(f"Var-Cell({cell[0]},{cell[1]})")
+        cells_str = ", ".join(cell_names)
+
         #sets up constraints for cage op
         if cage_op == '?':
-            varOp = Variable(f"Op{counter}",op_domain)
+            varOp = Variable(f"Cage_op({cage_target}:{cage_op}:[{cells_str}])",op_domain)
         else:
-            varOp = Variable(f"Op{counter}",[cage_op])
+            varOp = Variable(f"Cage_op({cage_target}:{cage_op}:[{cells_str}])",[cage_op])
         csp.add_var(varOp)
+        scope.append(varOp)
+
 
         #add cage constraints
         #create domain based on size of cage, operation and target
         cageDom = getCageDomain(range(1,size+1),len(cage_cells),cage_op,cage_target)
-
-        #create constraint: get relevant cells and the cage_op, and place with domains in csp
-        scope = []
-        for cell in cage_cells:
-            scope.append(getCell(cell[0],cell[1],cells,size))
-        scope.append(varOp)
-
-        constraint = Constraint(f"Cell{counter}",scope)
+        constraint = Constraint(f"cage{counter}",scope)
         constraint.add_satisfying_tuples(cageDom)
         csp.add_constraint(constraint)
-        
+
         counter+=1
     return csp,csp.get_all_vars()
 
@@ -282,8 +286,11 @@ def checkOp(op, target, values):
         for x in values[1:]:
             result = result / x
     elif op == '%':
+        modul = result
+        result = 0
         for x in values[1:]:
-            result = result % x
+            result = result + x
+        result = result % modul
     if result == target:
         return True
     return False

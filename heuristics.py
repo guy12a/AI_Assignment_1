@@ -1,7 +1,7 @@
 # =============================
-# Student Names:
-# Group ID:
-# Date:
+# Student Names: Guy Avraham
+# Group ID: 50
+# Date: 22/01/2026
 # =============================
 # CISC 352
 # heuristics.py
