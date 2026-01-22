@@ -94,33 +94,34 @@ def binary_ne_grid(cagey_grid):
     cells = createCellVariables(size,dom)
     csp = CSP("binaryCSP",cells)
 
-    #create constraints
-
     #provides something like [(1, 2), (1, 3), (2, 1), (2, 3), (3, 1), (3, 2)]
-    #these are the possible combinations of each two cells in same row or column
-    combinations = list(itertools.permutations(dom, 2)) 
+    #these are the possible permutations of EACH TWO CELLS in same row or column
+    permutations = list(itertools.permutations(dom, 2)) 
 
-    counter = 0
+    #create constraints - row and then columns
+    counter = 0 
     for i in range(size):
         row = collectCells(i,True,cells,size)
-        perms =list(itertools.combinations(row, 2)) #from [0,1,2] -> [(0,1),(0,2),(1,2)]
-        for pair in perms:
+        #creates combinations of each two variable in the row
+        combinations =list(itertools.combinations(row, 2))
+        for pair in combinations:
             first = pair[0]
             second = pair[1]
             constraint = Constraint(f"Row{counter}",[first,second])
-            constraint.add_satisfying_tuples(combinations)
+            constraint.add_satisfying_tuples(permutations)
             csp.add_constraint(constraint)
             counter +=1
 
-    counter = 0
+    counter = 0 
     for j in range(size):
         column = collectCells(j,False,cells,size)
-        perms =list(itertools.combinations(column, 2)) #from [0,1,2] -> [(0,1),(0,2),(1,2)]
-        for pair in perms:
+        #creates combinations of each two variable in the column
+        combinations =list(itertools.combinations(column, 2)) 
+        for pair in combinations:
             first = pair[0]
             second = pair[1]
             constraint = Constraint(f"Col{counter}",[first,second])
-            constraint.add_satisfying_tuples(combinations)
+            constraint.add_satisfying_tuples(permutations)
             csp.add_constraint(constraint)
             counter +=1
     
@@ -128,8 +129,32 @@ def binary_ne_grid(cagey_grid):
 
 
 def nary_ad_grid(cagey_grid):
-    ## IMPLEMENT
-    pass
+    size = cagey_grid[0]
+    dom = list(range(1,size+1))
+
+    cells = createCellVariables(size,dom)
+    csp = CSP("binaryCSP",cells)
+
+    #these are the possible permutations of ALL cells in same row or column
+    #[(1,2,3),(1,3,2),(2,1,3)...]
+    permutations = list(itertools.permutations(dom)) 
+
+    #create constraints - row and then columns
+    for i in range(size):
+        row = collectCells(i,True,cells,size)
+        constraint = Constraint(f"Row{i}",row)
+        constraint.add_satisfying_tuples(permutations)
+        csp.add_constraint(constraint)
+
+
+    for j in range(size):
+        column = collectCells(j,False,cells,size)
+        constraint = Constraint(f"Col{j}",column)
+        constraint.add_satisfying_tuples(permutations)
+        csp.add_constraint(constraint)
+
+    return csp, cells
+
 
 def cagey_csp_model(cagey_grid):
     ##IMPLEMENT
