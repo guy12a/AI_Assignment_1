@@ -146,7 +146,6 @@ def nary_ad_grid(cagey_grid):
         constraint.add_satisfying_tuples(permutations)
         csp.add_constraint(constraint)
 
-
     for j in range(size):
         column = collectCells(j,False,cells,size)
         constraint = Constraint(f"Col{j}",column)
@@ -157,8 +156,32 @@ def nary_ad_grid(cagey_grid):
 
 
 def cagey_csp_model(cagey_grid):
-    ##IMPLEMENT
-    pass
+    csp, cells = nary_ad_grid(cagey_grid)
+    size = cagey_grid[0]
+    cages = cagey_grid[1]
+
+    cage_domain = ['+','-','*','/','%']
+    counter=0
+    for cage in cages:
+        cage_value = cage[0]
+        cage_cells = cage[1]
+        cage_op = cage[2]
+        #cutting unnecessary calculations... if only one cell in cage, default to *
+        #and if target is higher than what addition could provide, then it must be * too
+        if cage_op == '?' and ((cage_value > len(cage_cells)*size) or (len(cage_cells) ==1)):
+            cage_op = '*'
+        
+        #sets up constraints for cage op
+        if cage_op == '?':
+            csp.add_var(Variable(f"Cage{counter}",cage_domain))
+        else:
+            csp.add_var(Variable(f"Cage{counter}",[cage_op]))
+
+        
+        counter+=1
+
+
+#Helper functions
 
 #creates a list of variables for each cell, with domain based on board
 def createCellVariables(size,dom):
@@ -179,3 +202,7 @@ def collectCells(number, rowOrCol, cells, n):
         for i in range(number, 1 + number + (n*(n-1)), n):
             toReturn.append(cells[i])
         return toReturn
+
+#get specific cell based on row and column  
+def getCell(row, column, cells, n):
+    return cells[(row-1)*n + column-1]
