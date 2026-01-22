@@ -90,29 +90,41 @@ import itertools
 def binary_ne_grid(cagey_grid):
     size = cagey_grid[0]
     dom = list(range(1,size+1))
+
     cells = createCellVariables(size,dom)
     csp = CSP("binaryCSP",cells)
 
     #create constraints
-    constraints = []
-    counter =0
-    arrayRange = list(range(0,size))
 
-    for i in arrayRange:
-        
-    for row in grid:
-        perms =list(itertools.permutations(row, 2))
+    #provides something like [(1, 2), (1, 3), (2, 1), (2, 3), (3, 1), (3, 2)]
+    #these are the possible combinations of each two cells in same row or column
+    combinations = list(itertools.permutations(dom, 2)) 
+
+    counter = 0
+    for i in range(size):
+        row = collectCells(i,True,cells,size)
+        perms =list(itertools.combinations(row, 2)) #from [0,1,2] -> [(0,1),(0,2),(1,2)]
         for pair in perms:
             first = pair[0]
             second = pair[1]
-            constraints.append(Constraint("Row"+counter,[first,second]))
+            constraint = Constraint(f"Row{counter}",[first,second])
+            constraint.add_satisfying_tuples(combinations)
+            csp.add_constraint(constraint)
             counter +=1
 
-
-
-    combinations = list(itertools.permutations(arrayRange, 2)) #provides something like [(1, 2), (1, 3), (2, 1), (2, 3), (3, 1), (3, 2)]
-
-    return csp
+    counter = 0
+    for j in range(size):
+        column = collectCells(j,False,cells,size)
+        perms =list(itertools.combinations(column, 2)) #from [0,1,2] -> [(0,1),(0,2),(1,2)]
+        for pair in perms:
+            first = pair[0]
+            second = pair[1]
+            constraint = Constraint(f"Col{counter}",[first,second])
+            constraint.add_satisfying_tuples(combinations)
+            csp.add_constraint(constraint)
+            counter +=1
+    
+    return csp, cells
 
 
 def nary_ad_grid(cagey_grid):
@@ -128,6 +140,17 @@ def createCellVariables(size,dom):
     list = []
     for i in range(1,size+1):
         for j in range(1,size+1):
-            list.append(Variable("Cell("+i+","+j+")",dom))
+            list.append(Variable(f"Cell({i},{j})",dom))
 
     return list
+
+#rowOrCol - if true means row, if false means column
+#number - which row or column we want, from 0 to n-1
+def collectCells(number, rowOrCol, cells, n):
+    if rowOrCol:
+        return cells[number*n : (number*n + n)]
+    else:
+        toReturn = []
+        for i in range(number, 1 + number + (n*(n-1)), n):
+            toReturn.append(cells[i])
+        return toReturn
